@@ -1,0 +1,53 @@
+source,log_message,label
+ThirdPartyAPI,User User123 logged out.,USER_ACTION
+ModernHR,User User123 logged in.,USER_ACTION
+ThirdPartyAPI,Backup started at 2022-01-01 12:00:00.,SYSTEM_NOTIFICATION
+BillingSystem,Backup ended at 2022-01-01 13:00:00.,SYSTEM_NOTIFICATION
+ModernHR,System updated to version 1.0.0.,SYSTEM_NOTIFICATION
+ModernHR,File report.pdf uploaded successfully by user User456.,SYSTEM_NOTIFICATION
+ThirdPartyAPI,Disk cleanup completed successfully.,SYSTEM_NOTIFICATION
+ModernHR,System reboot initiated by user User789.,SYSTEM_NOTIFICATION
+BillingSystem,Account with ID 12345 created by User999.,USER_ACTION
+ModernCRM,Backup completed successfully.,SYSTEM_NOTIFICATION
+ModernHR,Unauthorized access attempt detected.,SECURITY_REGEX
+AnalyticsEngine,Multiple failed login attempts from IP 192.168.1.1.,SECURITY_REGEX
+ModernHR,Account blocked due to suspicious activity.,SECURITY_REGEX
+BillingSystem,User login successful.,SECURITY_REGEX
+ModernCRM,Non-matching log message.,Security Alert
+ThirdPartyAPI,nova.osapi_compute.wsgi.server returned HTTP 404 for GET /v2/servers/detail,HTTP Status
+LegacyCRM,Request to compute API failed with HTTP 500 response code,HTTP Status
+AnalyticsEngine,Upstream service responded with HTTP 503 during metadata fetch,HTTP Status
+AnalyticsEngine,Email delivery subsystem failed causing outage in notification service,Critical Error
+LegacyCRM,Critical failure occurred while initializing billing workflow,Miscellaneous
+ModernCRM,System encountered fatal exception during startup sequence,Critical Error
+ThirdPartyAPI,Unauthorized access to protected customer data was detected,SECURITY_REGEX
+ModernCRM,Multiple authentication failures recorded for user account,Security Alert
+BillingSystem,Suspicious activity detected while validating access tokens,Security Alert
+ModernHR,Failed to process input record due to malformed payload,Error
+ModernCRM,Application encountered an error while reading configuration values,Critical Error
+LegacyCRM,Error occurred during transformation of analytics dataset,Miscellaneous
+ModernCRM,High memory consumption observed during batch analytics job,Resource Usage
+ModernCRM,CPU utilization spiked above threshold while processing reports,Resource Usage
+AnalyticsEngine,Disk space running low on storage node during backup operation,Resource Usage
+LegacyCRM,Service initialized and awaiting requests,System Notification
+ModernCRM,Background task executed successfully,Unclassified
+ThirdPartyAPI,ERROR: Job execution failed due to unhandled exception,Unclassified
+BillingSystem,Fatal error: pipeline aborted after task preprocess_data failed,Error
+ThirdPartyAPI,ERROR: Environment variable DATABASE_URL is not set,Unclassified
+ThirdPartyAPI,"Invalid configuration: expected integer for batch_size, got string",Unclassified
+BillingSystem,ModuleNotFoundError: No module named 'ipykernel',HTTP Status
+LegacyCRM,"ImportError: numpy>=2.0 required, but version 1.26.4 is installed",Dependency / Environment Issue
+LegacyCRM,DeprecationWarning: keras.backend.set_session is deprecated and will be removed in a future release,Deprecation Warning
+ModernCRM,WARNING: The --use_legacy_api flag is deprecated and will be removed in v3.0,Unclassified
+ModernCRM,WARNING: Inference latency exceeded threshold (1200ms > 500ms),Resource Usage
+ModernHR,PerformanceWarning: DataLoader is using a single worker and may be slow,Resource Usage
+ThirdPartyAPI,RuntimeError: CUDA out of memory. Tried to allocate 2.00 GiB,Resource Usage
+LegacyCRM,ERROR: No space left on device while writing checkpoint,Resource Usage
+ThirdPartyAPI,PermissionError: [Errno 13] Permission denied: '/var/log/app.log',Security Alert
+ModernHR,403 Forbidden: user does not have access to this resource,Security Alert
+AnalyticsEngine,ValueError: could not convert string to float: 'abc',Error
+ModernHR,"JSONDecodeError: Expecting ',' delimiter at line 4",HTTP Status
+ModernHR,INFO: Training job started with run_id=42,Unclassified
+BillingSystem,Server listening on port 8080,HTTP Status
+BillingSystem,Hello from worker process,Unclassified
+ThirdPartyAPI,Debug mode enabled,Critical Error

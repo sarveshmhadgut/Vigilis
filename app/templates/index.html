@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="hybrid log classification tool">
+    <title>Vigilis</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+
+{% macro get_tag_class(label) %}
+{% set l = label|lower %}
+{% if 'performance' in l %}tag-performance
+{% elif 'deprecation' in l %}tag-deprecation
+{% elif 'dependency' in l or 'environment' in l %}tag-dependency
+{% elif 'security' in l %}tag-security
+{% elif 'critical' in l %}tag-critical
+{% elif 'error' in l %}tag-error
+{% elif 'warning' in l %}tag-warning
+{% elif 'http' in l %}tag-http
+{% elif 'resource' in l %}tag-resource
+{% elif 'user' in l %}tag-user
+{% elif 'system' in l %}tag-system
+{% elif 'billing' in l %}tag-billing
+{% elif 'success' in l %}tag-success
+{% else %}tag-misc
+{% endif %}
+{% endmacro %}
+
+<div class="container">
+
+    <header>
+        <div class="brand-section">
+            <h1>Vigilis</h1>
+
+
+            <div class="system-status">System Operational</div>
+        </div>
+        <div class="meta-info">
+            <div>UNIT: <span class="meta-val">CLASSIFIER-01</span></div>
+            <div>KEY: <span class="meta-val">VGL-LOG-OPS</span></div>
+        </div>
+    </header>
+
+    <section class="interface-panel">
+        <div class="interface-inner">
+            <form action="/predict" method="POST" enctype="multipart/form-data">
+
+                <label class="upload-zone" id="drop-zone">
+                    <input type="file" name="file" accept=".csv" required style="display: none;" id="file-input">
+                    <div class="icon-crosshair"></div>
+                    <div class="upload-label" id="upload-text">Upload Log File</div>
+                    <div class="upload-sub" id="upload-sub">Format: CSV (Max: 10MB)</div>
+                </label>
+
+                <button type="submit" class="btn-action">
+                    <span>Start Analysis</span>
+                </button>
+            </form>
+
+            <script>
+                const fileInput = document.getElementById('file-input');
+                const uploadText = document.getElementById('upload-text');
+                const uploadSub = document.getElementById('upload-sub');
+                const dropZone = document.getElementById('drop-zone');
+
+                fileInput.addEventListener('change', function (e) {
+                    if (this.files && this.files[0]) {
+                        uploadText.textContent = this.files[0].name;
+                        uploadSub.textContent = "Ready to Process";
+                        dropZone.style.borderColor = "var(--success)";
+                        dropZone.style.background = "#111111";
+                    }
+                });
+            </script>
+
+            {% if error %}
+            <div class="error-msg">
+                <div>ERROR_CODE: INPUT_FAILURE // {{ error }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    {% if results %}
+    <section class="data-display">
+        <div class="data-controls">
+            <div class="data-title">
+                {{ uploaded_filename }} <span style="opacity: 0.5; margin-left: 0.5rem;">[{{ results|length }}]</span>
+            </div>
+            <a href="data:text/csv;base64,{{ csv_data }}" download="{{ filename }}" class="btn-small">
+                &darr; Download CSV
+            </a>
+        </div>
+
+        <div class="table-scroller">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Source_Origin</th>
+                        <th>Message_Content</th>
+                        <th>Label</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in results %}
+                    <tr>
+                        <td style="color: var(--secondary);">{{ loop.index }}</td>
+                        <td>{{ row.source }}</td>
+                        <td style="font-family: var(--font-sans);">{{ row.log_message }}</td>
+                        <td>
+                            <span class="tag {{ get_tag_class(row.label) }}">{{ row.label }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+
+</div>
+</body>
+
+</html>

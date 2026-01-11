@@ -1,0 +1,47 @@
+source,log_message
+ThirdPartyAPI,User User123 logged out.
+ThirdPartyAPI,Backup started at 2022-01-01 12:00:00.
+ModernHR,Account blocked due to suspicious activity.
+ModernCRM,High memory consumption observed during batch analytics job
+BillingSystem,Suspicious activity detected while validating access tokens
+LegacyCRM,Critical failure occurred while initializing billing workflow
+AnalyticsEngine,ValueError: could not convert string to float: 'abc'
+ModernHR,User User123 logged in.
+ThirdPartyAPI,Unauthorized access to protected customer data was detected
+BillingSystem,Backup ended at 2022-01-01 13:00:00.
+BillingSystem,Account with ID 12345 created by User999.
+ModernCRM,Backup completed successfully.
+ModernHR,Unauthorized access attempt detected.
+AnalyticsEngine,Multiple failed login attempts from IP 192.168.1.1.
+BillingSystem,User login successful.
+ModernCRM,Non-matching log message.
+ThirdPartyAPI,nova.osapi_compute.wsgi.server returned HTTP 404 for GET /v2/servers/detail
+AnalyticsEngine,Email delivery subsystem failed causing outage in notification service
+ModernCRM,System encountered fatal exception during startup sequence
+ModernCRM,Multiple authentication failures recorded for user account
+ModernHR,Failed to process input record due to malformed payload
+ModernCRM,Application encountered an error while reading configuration values
+LegacyCRM,Error occurred during transformation of analytics dataset
+ModernCRM,CPU utilization spiked above threshold while processing reports
+AnalyticsEngine,Disk space running low on storage node during backup operation
+ThirdPartyAPI,ERROR: Job execution failed due to unhandled exception
+BillingSystem,Fatal error: pipeline aborted after task preprocess_data failed
+ThirdPartyAPI,ERROR: Environment variable DATABASE_URL is not set
+ThirdPartyAPI,"Invalid configuration: expected integer for batch_size, got string"
+BillingSystem,ModuleNotFoundError: No module named 'ipykernel'
+LegacyCRM,"ImportError: numpy>=2.0 required, but version 1.26.4 is installed"
+ModernHR,File report.pdf uploaded successfully by user User456.
+LegacyCRM,DeprecationWarning: keras.backend.set_session is deprecated and will be removed in a future release
+ModernCRM,WARNING: The --use_legacy_api flag is deprecated and will be removed in v3.0
+ModernCRM,WARNING: Inference latency exceeded threshold (1200ms > 500ms)
+AnalyticsEngine,Upstream service responded with HTTP 503 during metadata fetch
+ModernHR,PerformanceWarning: DataLoader is using a single worker and may be slow
+ThirdPartyAPI,RuntimeError: CUDA out of memory. Tried to allocate 2.00 GiB
+LegacyCRM,ERROR: No space left on device while writing checkpoint
+ThirdPartyAPI,PermissionError: [Errno 13] Permission denied: '/var/log/app.log'
+ModernHR,403 Forbidden: user does not have access to this resource
+ModernHR,"JSONDecodeError: Expecting ',' delimiter at line 4"
+ModernHR,INFO: Training job started with run_id=42
+BillingSystem,Server listening on port 8080
+BillingSystem,Hello from worker process
+ThirdPartyAPI,Debug mode enabled
