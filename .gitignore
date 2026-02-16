@@ -13,3 +13,4 @@ dataset/
 logs/
 .env
 .DS_Store
+DOCKER_INSTRUCTIONS.md

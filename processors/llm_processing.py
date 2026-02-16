@@ -1,24 +1,26 @@
-import re
-from groq import Groq
+import os
+import sys
 from typing import List
 from dotenv import load_dotenv
-from groq.types.chat.chat_completion import ChatCompletion
-import sys
-import os
+from pydantic import BaseModel, Field
+from langchain_core.prompts import PromptTemplate
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.output_parsers import PydanticOutputParser
 
-# Add project root to sys.path to allow running this script directly
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-
 load_dotenv()
+
+
+class LlmSchema(BaseModel):
+    label: str = Field(description="Classification label of the log message.")
 
 
 class LlmProcessor:
     """
-    Handles log classification using Large Language Models provided by Groq.
+    Handles log classification using Large Language Models provided by Google Gemini via LangChain.
 
     Responsibilities:
-        - Initialize the Groq client securely.
+        - Initialize the Google Generative AI client.
         - Construct a prompt with classification instructions and categories.
         - Send the prompt to the LLM and parse the response to extract the label.
         - Handle API errors and fall back to 'Unclassified'.
@@ -26,16 +28,61 @@ class LlmProcessor:
 
     def __init__(self) -> None:
         """
-        Initializes the LlmProcessor by setting up the Groq client.
+        Initializes the LlmProcessor by setting up the Google Gemini client.
         """
         try:
-            self.groq = Groq(max_retries=0)
-        except Exception:
-            self.groq = None
+            self.parser: PydanticOutputParser[LlmSchema] = PydanticOutputParser(
+                pydantic_object=LlmSchema
+            )
+
+            self.prompt = PromptTemplate(
+                template="""
+                You are an expert system log analyzer.
+                Classify the following log message into one of these categories:
+                - User Action
+                - System Notification
+                - HTTP Status
+                - Critical Error
+                - Security Alert
+                - Error
+                - Resource Usage
+                - Workflow Error
+                - Configuration Error
+                - Dependency / Environment Issue
+                - Deprecation Warning
+                - Performance Warning
+                - Resource Exhaustion
+                - Security / Permission Issue
+                - Data / Input Error
+                - Informational / Status
+                - Miscellaneous
+
+                If the log does not fit well into any specific category, use "Miscellaneous".
+
+                Log Message:
+                {message}
+
+                {parser_instructions}
+                """,
+                input_variables=["message"],
+                partial_variables={
+                    "parser_instructions": self.parser.get_format_instructions()
+                },
+            )
+
+            self.model = ChatGoogleGenerativeAI(
+                model="gemini-3-pro-preview", temperature=0
+            )
+
+            self.chain = self.prompt | self.model | self.parser
+
+        except Exception as e:
+            print(f"Error initializing LlmProcessor: {e}")
+            self.model = None
 
     def classify(self, message: str) -> str:
         """
-        Analyzes a log message using an LLM (Groq) to determine its category.
+        Analyzes a log message using Google Gemini to determine its category.
 
         Args:
             message (str): The log message string to analyze.
@@ -46,56 +93,15 @@ class LlmProcessor:
         Raises:
             Exception: Captures and logs any unexpected errors during processing.
         """
-        if not self.groq:
+        if not self.model:
             return "Unclassified"
 
-        prompt = f"""
-            Developer: Classify the following log message into one of the categories below based on its primary issue.
-
-            Categories:
-            - Workflow Error: Failures in process flow, pipeline execution, or job completion.
-            - Performance Warning: Latency issues, slow operations, or potential bottlenecks.
-            - Configuration Error: Missing or invalid settings, environment variables, or parameters.
-            - Dependency / Environment Issue: Missing modules, version conflicts, or environment setup failures.
-            - Deprecation Warning: Warnings about outdated features or future removals.
-            - Data / Input Error: Invalid data formats, parsing errors, malformed inputs, or ValueError/JSONDecodeError.
-            - User Action: Logins, logouts, creations, or explicit user-initiated commands.
-            - Resource Usage: Memory, CPU, disk space, or quota limits (including OOM).
-            - System Notification: status updates, successful completions, or informational messages.
-            - Security Alert: Unauthorized access, authentication failures, permission denials, or blocked accounts.
-            - Critical Error: Severe system crashes, fatal exceptions, or outage-causing failures.
-            - HTTP Status: HTTP response codes (4xx, 5xx), API request status, or service availability issues.
-            - Miscellaneous: Log messages that do not fit into any of the above categories.
-
-            Instructions:
-            - Select exactly ONE category.
-            - Output only the selected category in the format: <label>CategoryName</label>.
-            - Do not include explanations or any extra text.
-
-            Log message:
-            {message}
-            """
-
         try:
-            response: ChatCompletion = self.groq.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0,
-                max_completion_tokens=100,
-                timeout=10,
-            )
+            response = self.chain.invoke({"message": message})
+            return response.label
 
-            res: str = response.choices[0].message.content
-            match: re.Match[str] | None = re.search(
-                r"<label>(.*?)<\/label>", res, flags=re.DOTALL
-            )
-
-            if match:
-                return match.group(1).strip()
-
-            return "Miscellaneous"
-
-        except Exception:
+        except Exception as e:
+            print(f"Error classifying log: {e}")
             return "Unclassified"
 
 

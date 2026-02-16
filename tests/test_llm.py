@@ -1,58 +1,59 @@
 import unittest
+from io import StringIO
 from unittest.mock import MagicMock, patch
 from processors.llm_processing import LlmProcessor
 
 
 class TestLlmProcessor(unittest.TestCase):
     def setUp(self):
-        self.groq_patcher = patch("processors.llm_processing.Groq")
-        self.mock_groq_class = self.groq_patcher.start()
+        # Patch the dependencies
+        self.patcher_chat = patch("processors.llm_processing.ChatGoogleGenerativeAI")
+        self.patcher_prompt = patch("processors.llm_processing.PromptTemplate")
+        self.patcher_parser = patch("processors.llm_processing.PydanticOutputParser")
 
-        self.mock_groq_instance = MagicMock()
-        self.mock_groq_class.return_value = self.mock_groq_instance
-
-        self.processor = LlmProcessor()
+        self.MockChat = self.patcher_chat.start()
+        self.MockPrompt = self.patcher_prompt.start()
+        self.MockParser = self.patcher_parser.start()
 
     def tearDown(self):
-        self.groq_patcher.stop()
+        self.patcher_chat.stop()
+        self.patcher_prompt.stop()
+        self.patcher_parser.stop()
 
     def test_classify_success(self):
-        mock_completion = MagicMock()
-        mock_completion.choices[0].message.content = "<label>Security Alert</label>"
+        # Setup the chain mock
+        processor = LlmProcessor()
+        processor.chain = MagicMock()
 
-        self.mock_groq_instance.chat.completions.create.return_value = mock_completion
+        # Mock successful response
+        mock_response = MagicMock()
+        mock_response.label = "Security Alert"
+        processor.chain.invoke.return_value = mock_response
 
-        label = self.processor.classify("Unauthorized access attempt")
+        label = processor.classify("Unauthorized access attempt")
         self.assertEqual(label, "Security Alert")
 
-    def test_classify_no_label_match(self):
-        mock_completion = MagicMock()
-        mock_completion.choices[0].message.content = "This looks like a security issue."
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_classify_api_error(self, mock_stdout):
+        processor = LlmProcessor()
+        processor.chain = MagicMock()
 
-        self.mock_groq_instance.chat.completions.create.return_value = mock_completion
+        # Mock exception
+        processor.chain.invoke.side_effect = Exception("API Error")
 
-        label = self.processor.classify("Some message")
-        self.assertEqual(label, "Miscellaneous")
-
-    def test_classify_api_error(self):
-        self.mock_groq_instance.chat.completions.create.side_effect = Exception(
-            "API Error"
-        )
-
-        label = self.processor.classify("Some message")
+        label = processor.classify("Some message")
         self.assertEqual(label, "Unclassified")
 
-    def test_init_failure(self):
-        self.groq_patcher.stop()
-
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_init_failure(self, mock_stdout):
+        # Simulate initialization failure
         with patch(
-            "processors.llm_processing.Groq", side_effect=Exception("Init Error")
+            "processors.llm_processing.ChatGoogleGenerativeAI",
+            side_effect=Exception("Init Error"),
         ):
             processor = LlmProcessor()
-            self.assertIsNone(processor.groq)
+            self.assertIsNone(processor.model)
             self.assertEqual(processor.classify("msg"), "Unclassified")
-
-        self.groq_patcher.start()
 
 
 if __name__ == "__main__":

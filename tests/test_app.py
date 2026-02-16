@@ -8,6 +8,8 @@ from app.app import app, classifier
 class TestApp(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
+        self.original_classify_message = classifier.classify_message
+        self.original_batch_classify = classifier.batch_classify
 
         classifier.classify_message = MagicMock(return_value="Mocked_Label")
         classifier.batch_classify = MagicMock(return_value=["Mocked_Label"])

@@ -1,5 +1,5 @@
 
-# Vigilis – The Intelligent Log Guardian
+# Vigilis – Tiered Log Classification
 
 Vigilis turns the chaos of system logs into structured, actionable intelligence. Instead of relying on brittle keyword searches or expensive commercial tools, it uses a smart tiered approach—combining specific rules, semantic understanding, and generative AI—to classify logs with both speed and precision.
 
@@ -9,7 +9,7 @@ Modern applications generate gigabytes of logs. Parsing them manually is impossi
 
 1.  **Regex (The Speed Layer):** Instantly catches known, repetitive patterns.
 2.  **BERT (The Semantic Layer):** Understands the *meaning* of logs, not just keywords, catching variations that regex misses.
-3.  **LLM (The Intelligence Layer):** Leverages a Large Language Model (Llama-3 via Groq) to reason through ambiguous, rare, or complex log messages just like a human engineer would.
+3.  **LLM (The Intelligence Layer):** Leverages a Large Language Model (Google Gemini via LangChain) to reason through ambiguous, rare, or complex log messages just like a human engineer would.
 
 ## Features
 
@@ -25,7 +25,7 @@ Modern applications generate gigabytes of logs. Parsing them manually is impossi
 | **Backend** | Python 3.12, FastAPI | The core orchestration engine. |
 | **Logic** | Pandas, NumPy | Efficient data handling and transformation. |
 | **AI/ML** | SentenceTransformers (BERT), Scikit-learn | Semantic embedding and classification. |
-| **GenAI** | Groq (Llama-3-70b) | High-speed inference for complex reasoning. |
+| **GenAI** | Google Gemini (Gemini 3 Pro Preview) | High-speed inference for complex reasoning. |
 | **Frontend** | Jinja2, Custom CSS | A responsive, no-framework web UI. |
 | **Ops** | UV, Prometheus | Modern dependency management and monitoring. |
 
@@ -68,11 +68,11 @@ uv sync
 
 ### 2. Configure
 
-Vigilis needs a brain for the hard stuff. Get a free API key from [Groq](https://console.groq.com) and set it up:
+Vigilis needs a brain for the hard stuff. Get a free API key from [Google AI Studio](https://aistudio.google.com/) and set it up:
 
 Create a `.env` file:
 ```env
-GROQ_API_KEY="your_api_key_here"
+GOOGLE_API_KEY="your_api_key_here"
 ```
 
 ### 3. Run
@@ -80,7 +80,7 @@ GROQ_API_KEY="your_api_key_here"
 Launch the web interface:
 
 ```bash
-uv run app/app.py
+uv run uvicorn app.app:app --reload
 ```
 
 Then open **http://localhost:8000** to see Vigilis in action.
