@@ -11,6 +11,12 @@ wheels/
 .vscode
 dataset/
 logs/
+artifacts/
 .env
 .DS_Store
 DOCKER_INSTRUCTIONS.md
+
+# Tool caches
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/

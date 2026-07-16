@@ -1,25 +1,27 @@
-import os
-import io
-import time
-import psutil
 import base64
-import uvicorn
-import pandas as pd
+import io
+import os
+import time
 from typing import List
-from pydantic import BaseModel
-from main import LogClassifier
+
+import pandas as pd
+import psutil
+import uvicorn
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, Response
-from fastapi import FastAPI, Request, HTTPException, UploadFile, File
 from prometheus_client import (
+    CONTENT_TYPE_LATEST,
     CollectorRegistry,
     Counter,
-    Histogram,
     Gauge,
+    Histogram,
     generate_latest,
-    CONTENT_TYPE_LATEST,
 )
+from pydantic import BaseModel
+
+from main import LogClassifier
 
 # Initialize the FastAPI app with metadata
 app = FastAPI(

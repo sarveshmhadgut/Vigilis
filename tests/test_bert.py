@@ -1,14 +1,16 @@
 import unittest
 from unittest.mock import MagicMock, patch
+
 import numpy as np
-from processors.bert_processing import BertProcessor
+
+from processors.bert_processor import BertProcessor
 
 
 class TestBertProcessor(unittest.TestCase):
-    @patch("processors.bert_processing.SentenceTransformer")
-    @patch("processors.bert_processing.pickle.load")
-    @patch("processors.bert_processing.open")
-    @patch("processors.bert_processing.Path.exists")
+    @patch("processors.bert_processor.SentenceTransformer")
+    @patch("processors.bert_processor.pickle.load")
+    @patch("processors.bert_processor.open")
+    @patch("processors.bert_processor.Path.exists")
     def setUp(self, mock_exists, mock_open, mock_pickle_load, mock_transformer_cls):
         mock_exists.return_value = True
 
@@ -51,7 +53,7 @@ class TestBertProcessor(unittest.TestCase):
         label = self.processor.classify("msg")
         self.assertEqual(label, "Unclassified")
 
-    @patch("processors.bert_processing.logging")
+    @patch("processors.bert_processor.logging")
     def test_classify_error(self, mock_logging):
         self.mock_transformer.encode.side_effect = Exception("Encode Error")
 

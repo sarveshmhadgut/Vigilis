@@ -1,8 +1,10 @@
+from typing import Dict, List
+
 import pandas as pd
-from typing import List, Dict
-from processors.regex_processing import RegexProcessor
-from processors.bert_processing import BertProcessor
-from processors.llm_processing import LlmProcessor
+
+from processors.bert_processor import BertProcessor
+from processors.llm_processor import LlmProcessor
+from processors.regex_processor import RegexProcessor
 
 
 class LogClassifier:
@@ -63,12 +65,9 @@ class LogClassifier:
         results = []
         for log in logs:
             results.append(self.classify_message(log["source"], log["log_message"]))
-            time.sleep(0.2)  # Slight delay to respect Rate Limits
         return results
 
-    def generate_labelled_logs(
-        self, logs_dirpath: str, output_path: str = "./artifacts/labelled_logs.csv"
-    ) -> None:
+    def generate_labelled_logs(self, logs_dirpath: str, output_path: str = "./artifacts/labelled_logs.csv") -> None:
         """
         Reads logs from a CSV, classifies them, and saves the results.
 

@@ -1,7 +1,8 @@
+import logging
 import os
 from pathlib import Path
-import logging
 
+logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s]: %(message)s:")
 
 list_of_files = [
@@ -11,9 +12,9 @@ list_of_files = [
     "app/templates/index.html",
     "main.py",
     "processors/__init__.py",
-    "processors/bert_processing.py",
-    "processors/llm_processing.py",
-    "processors/regex_processing.py",
+    "processors/bert_processor.py",
+    "processors/llm_processor.py",
+    "processors/regex_processor.py",
     "pyproject.toml",
     "README.md",
     "tests/test_app.py",
@@ -23,17 +24,16 @@ list_of_files = [
     "utils/logger.py",
 ]
 
-for filepath in list_of_files:
-    filepath = Path(filepath)
+for filepath_str in list_of_files:
+    filepath = Path(filepath_str)
     filedir, filename = os.path.split(filepath)
 
     if filedir != "":
         os.makedirs(filedir, exist_ok=True)
-        logging.info(f"Creating directory: {filedir} for the file {filename}")
+        logger.info(f"Creating directory: {filedir} for the file {filename}")
 
     if (not os.path.exists(filepath)) or (os.path.getsize(filepath) == 0):
-        with open(filepath, "w") as f:
-            pass
-            logging.info(f"Creating empty file: {filepath}")
+        Path(filepath).touch()
+        logger.info(f"Creating empty file: {filepath}")
     else:
-        logging.info(f"File '{filepath}' already exists")
+        logger.info(f"File '{filepath}' already exists")

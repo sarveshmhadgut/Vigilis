@@ -1,12 +1,12 @@
 [project]
 name = "vigilis"
 version = "0.1.0"
-description = "Add your description here"
+description = "Tiered log classification using Regex, BERT, and LLM with a FastAPI backend and Prometheus monitoring."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "colorlog",
-    "dotenv",
+    "python-dotenv",
     "fastapi",
     "from-root",
     "ipykernel",
@@ -36,3 +36,13 @@ packages = ["app", "models", "processors", "utils"]
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff",
+    "mypy",
+]
+
+[tool.ruff.lint]
+ignore = ["I001", "SIM117", "BLE001", "UP006", "UP035", "F401", "F841"]

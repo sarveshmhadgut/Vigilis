@@ -1,9 +1,10 @@
-import os
 import logging
+import os
+from datetime import datetime
+from logging.handlers import RotatingFileHandler
+
 import colorlog
 from from_root import from_root
-from logging.handlers import RotatingFileHandler
-from datetime import datetime
 
 
 def fallback_from_root() -> str:

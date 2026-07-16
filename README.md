@@ -1,6 +1,4 @@
-
 # Vigilis – Tiered Log Classification
-
 Vigilis turns the chaos of system logs into structured, actionable intelligence. Instead of relying on brittle keyword searches or expensive commercial tools, it uses a smart tiered approach—combining specific rules, semantic understanding, and generative AI—to classify logs with both speed and precision.
 
 ## Why Vigilis?
@@ -9,7 +7,7 @@ Modern applications generate gigabytes of logs. Parsing them manually is impossi
 
 1.  **Regex (The Speed Layer):** Instantly catches known, repetitive patterns.
 2.  **BERT (The Semantic Layer):** Understands the *meaning* of logs, not just keywords, catching variations that regex misses.
-3.  **LLM (The Intelligence Layer):** Leverages a Large Language Model (Google Gemini via LangChain) to reason through ambiguous, rare, or complex log messages just like a human engineer would.
+3.  **LLM (The Intelligence Layer):** Leverages a Large Language Model (Google Gemini via LangChain) to reason through ambiguous, rare, or complex log messages just like a human engineer would
 
 ## Features
 
@@ -45,9 +43,9 @@ Vigilis/
 │   ├── templates/        # HTML interfaces
 │   └── static/           # CSS and assets
 ├── processors/           # The brains of the operation
-│   ├── regex_processing.py
-│   ├── bert_processing.py
-│   └── llm_processing.py
+│   ├── regex_processor.py
+│   ├── bert_processor.py
+│   └── llm_processor.py
 ├── models/               # Serialized BERT models
 ├── notebooks/            # Research and training grounds
 ├── tests/                # Unit tests ensuring reliability
@@ -85,10 +83,25 @@ uv run uvicorn app.app:app --reload
 
 Then open **http://localhost:8000** to see Vigilis in action.
 
+### 4. API Usage
+
+You can also use Vigilis completely headlessly as an API. 
+
+**Single Prediction:**
+```bash
+curl -X POST http://localhost:8000/classify \
+  -H "Content-Type: application/json" \
+  -d '{"source": "auth", "log_message": "Failed password for root from 192.168.1.100"}'
+```
+
+### 5. Docker Deployment
+
+Prefer containers? See our full [Docker Deployment Guide](DOCKER_INSTRUCTIONS.md) for instructions on building and running Vigilis via Docker.
+
 ## Testing
 
 We believe in reliable code. Run the full suite to verify everything is green:
 
 ```bash
-uv run -m unittest discover tests
+uv run pytest tests
 ```

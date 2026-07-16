@@ -1,7 +1,9 @@
+import io
 import unittest
 from unittest.mock import MagicMock
-import io
+
 from fastapi.testclient import TestClient
+
 from app.app import app, classifier
 
 

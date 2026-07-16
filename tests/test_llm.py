@@ -1,15 +1,16 @@
 import unittest
 from io import StringIO
 from unittest.mock import MagicMock, patch
-from processors.llm_processing import LlmProcessor
+
+from processors.llm_processor import LlmProcessor
 
 
 class TestLlmProcessor(unittest.TestCase):
     def setUp(self):
         # Patch the dependencies
-        self.patcher_chat = patch("processors.llm_processing.ChatGoogleGenerativeAI")
-        self.patcher_prompt = patch("processors.llm_processing.PromptTemplate")
-        self.patcher_parser = patch("processors.llm_processing.PydanticOutputParser")
+        self.patcher_chat = patch("processors.llm_processor.ChatGoogleGenerativeAI")
+        self.patcher_prompt = patch("processors.llm_processor.PromptTemplate")
+        self.patcher_parser = patch("processors.llm_processor.PydanticOutputParser")
 
         self.MockChat = self.patcher_chat.start()
         self.MockPrompt = self.patcher_prompt.start()
@@ -48,7 +49,7 @@ class TestLlmProcessor(unittest.TestCase):
     def test_init_failure(self, mock_stdout):
         # Simulate initialization failure
         with patch(
-            "processors.llm_processing.ChatGoogleGenerativeAI",
+            "processors.llm_processor.ChatGoogleGenerativeAI",
             side_effect=Exception("Init Error"),
         ):
             processor = LlmProcessor()
