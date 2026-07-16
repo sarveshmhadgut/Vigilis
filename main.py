@@ -67,7 +67,9 @@ class LogClassifier:
             results.append(self.classify_message(log["source"], log["log_message"]))
         return results
 
-    def generate_labelled_logs(self, logs_dirpath: str, output_path: str = "./artifacts/labelled_logs.csv") -> None:
+    def generate_labelled_logs(
+        self, logs_dirpath: str, output_path: str = "./artifacts/labelled_logs.csv"
+    ) -> None:
         """
         Reads logs from a CSV, classifies them, and saves the results.
 
