@@ -24,7 +24,6 @@ Modern applications generate gigabytes of logs. Parsing them manually is impossi
 | **Logic** | Pandas, NumPy | Efficient data handling and transformation. |
 | **AI/ML** | SentenceTransformers (BERT), Scikit-learn | Semantic embedding and classification. |
 | **GenAI** | Google Gemini (Gemini 3 Pro Preview) | High-speed inference for complex reasoning. |
-| **Frontend** | Jinja2, Custom CSS | A responsive, no-framework web UI. |
 | **Ops** | UV, Prometheus | Modern dependency management and monitoring. |
 
 ## How It Works
@@ -93,10 +92,6 @@ curl -X POST http://localhost:8000/classify \
   -H "Content-Type: application/json" \
   -d '{"source": "auth", "log_message": "Failed password for root from 192.168.1.100"}'
 ```
-
-### 5. Docker Deployment
-
-Prefer containers? See our full [Docker Deployment Guide](DOCKER_INSTRUCTIONS.md) for instructions on building and running Vigilis via Docker.
 
 ## Testing
 
